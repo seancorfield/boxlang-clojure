@@ -1,0 +1,11 @@
+.calva/repl.calva-repl
+.clj-kondo/.cache
+.cpcache
+.lsp/.cache
+.portal/vs-code.edn
+/bin
+/grapher
+/lib
+.nrepl-port
+box
+boxlang-latest.zip

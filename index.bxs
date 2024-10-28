@@ -1,0 +1,19 @@
+// verify classpath from Clojure:
+for (p in application.urls) echo(p & char(10))
+
+for (x in application.clj.read("[1 2 3]")) echo(x & char(10))
+
+plus = application.clj.var("clojure.core", "+")
+echo("(+ 1 2) = " & plus.invoke(1, 2) & char(10))
+
+try {
+  application.clj.require("example.no-such-namespace")
+} catch (e) {
+  echo("require failed: " & e.cause.message & char(10))
+}
+
+echo(application.clj.call("clojure.string/join", ["Hello,", "World!"]) & char(10))
+
+echo(application.clj.call("example.greet/welcome", "Clojure") & char(10))
+
+echo(application.clj.call("clojure.core/*", 2, 3) & char(10))
