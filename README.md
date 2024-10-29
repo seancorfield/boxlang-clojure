@@ -43,3 +43,13 @@ The `require failed` message is expected: that is a test of catching
 exceptions in BoxLang that are thrown from Clojure code.
 
 Happy Clojuring!
+
+> Note: the example currently includes a lot more code than I wish were necessary. In particular, I had _hoped_ that `Application.bx` only needed this code:
+```javascript
+  this.javaSettings = {
+    loadPaths: systemExecute("clojure","-Spath").output.split(":")
+  };
+```
+> And that the code in `simple.bxs` would run. It should be able to import a class on the classpath from the `javaSettings` (which `clojure.java.api.Clojure` is), and then call static methods on it.
+
+Instead, per `Application.bxs` `onApplicationStart()`, the current thread's classpath has to be augmented with a URL classloader containing the same files that should already be on `javaSettings.loadPaths`.

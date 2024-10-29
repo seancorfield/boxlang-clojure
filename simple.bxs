@@ -1,0 +1,6 @@
+import clojure.java.api.Clojure;
+
+for (x in Clojure::read("[1 2 3]")) echo(x & char(10))
+
+plus = Clojure::var("clojure.core", "+")
+echo("(+ 1 2) = " & plus.invoke(1, 2) & char(10))
