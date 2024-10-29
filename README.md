@@ -52,4 +52,4 @@ Happy Clojuring!
 ```
 > And that the code in `simple.bxs` would run. It should be able to import a class on the classpath from the `javaSettings` (which `clojure.java.api.Clojure` is), and then call static methods on it.
 
-Instead, per `Application.bxs` `onApplicationStart()`, the current thread's classpath has to be augmented with a URL classloader containing the same files that should already be on `javaSettings.loadPaths`.
+Instead, per `Application.bx` `onApplicationStart()`, the current thread's classpath has to be augmented with a URL classloader containing the same files that should already be on `javaSettings.loadPaths`.
