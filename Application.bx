@@ -1,57 +1,12 @@
-import java.lang.Class;
-import java.lang.reflect.Array;
-import java.lang.Thread;
-
 class {
   this.javaSettings = {
-    loadPaths: systemExecute("clojure","-Spath").output.split(server.separator.path)
+    loadPaths: systemExecute("clojure","-Spath").output
+      .split(server.separator.path).map(::expandPath)
   };
 
   function onApplicationStart() {
-    var urls = this.javaSettings.loadPaths.map(p =>
-      new java:java.io.File(p).toURI().toURL()
-    );
-    // replace the classloader with all the necessary URLs added:
-    var myThread = Thread::currentThread();
-    var classloader = new java:java.net.URLClassLoader(
-        urls.toArray( Array::newInstance( Class::forName("java.net.URL"), urls.size() ) ),
-        myThread.getContextClassLoader()
-    );
-    myThread.setContextClassLoader( classloader );
-
-    var stringType = Class::forName("java.lang.String");
-    var objectType = Class::forName("java.lang.Object");
-
-    // install clojure.java.api.Clojure:
-    var clj = classloader.loadClass("clojure.java.api.Clojure");
-    // Object var(Object ns):
-    var _var1 = clj.getMethod("var", [objectType]);
-    // Object var(Object ns, Object name):
-    var _var2 = clj.getMethod("var", [objectType, objectType]);
-    // Object read(String s):
-    var _read = clj.getMethod("read", [stringType]);
-    // convenience for core fns we use for interop:
-    var _resolve = (fqn) => _var1.invoke(null, ["clojure.core/requiring-resolve"])
-        .invoke(_read.invoke(null, [fqn]));
-    var _seq = (coll) => _var1.invoke(null, ["clojure.core/seq"])
-        .invoke(coll);
-    var _next = (coll) => _var1.invoke(null, ["clojure.core/next"])
-        .invoke(coll);
-    // BoxLang wrapper:
-    application.clj = {
-      var: (ns, name) => ns.find("/") ?
-        _var1.invoke(null, [ns]) : _var2.invoke(null, [ns, name]),
-      read: (s) => _read.invoke(null, [s]),
-      // convenience methods:
-      call: () => _resolve(arguments[1])
-        .applyTo(_next(_seq([].append(arguments, true)))),
-      require: (ns) => _var1.invoke(null, ["clojure.core/require"])
-        .invoke(_read.invoke(null, [ns]))
-    };
-
     // expose for debugging only:
     application.paths = this.javaSettings.loadPaths
-    application.urls = urls;
   }
 
 }

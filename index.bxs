@@ -1,19 +1,37 @@
-// verify classpath from Clojure:
-for (p in application.urls) echo(p & char(10))
+import clojure.java.api.Clojure;
 
-for (x in application.clj.read("[1 2 3]")) echo(x & char(10))
+for (x in Clojure::read("[1 2 3]")) echo(x & char(10))
 
-plus = application.clj.var("clojure.core", "+")
+plus = Clojure::var("clojure.core", "+")
 echo("(+ 1 2) = " & plus.invoke(1, 2) & char(10))
 
+// === convenience for core fns we use for interop: ===
+_resolve = (fqn) =>
+  (Clojure::var("clojure.core/requiring-resolve")).invoke(Clojure::read(fqn));
+_seq = (coll) =>
+  (Clojure::var("clojure.core/seq")).invoke(coll);
+_next = (coll) => (Clojure::var("clojure.core/next")).invoke(coll);
+
+call = () => _resolve(arguments[1])
+  .applyTo(_next(_seq([].append(arguments, true))));
+// === ===
+
+require = (ns) =>
+  (Clojure::var("clojure.core/require")).invoke(Clojure::read(ns))
+
 try {
-  application.clj.require("example.no-such-namespace")
+  require("example.no-such-namespace")
 } catch (e) {
   echo("require failed: " & e.cause.message & char(10))
 }
 
-echo(application.clj.call("clojure.string/join", ["Hello,", "World!"]) & char(10))
+echo(call("clojure.string/join", ["Hello, ", "World!"]) & char(10))
 
-echo(application.clj.call("example.greet/welcome", "Clojure") & char(10))
+// verify classpath from Clojure:
+for (p in application.paths) echo(p & char(10))
 
-echo(application.clj.call("clojure.core/*", 2, 3) & char(10))
+require("example.greet")
+
+echo(call("example.greet/welcome", "Clojure") & char(10))
+
+echo(call("clojure.core/*", 2, 3) & char(10))
