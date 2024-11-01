@@ -1,2 +1,1 @@
-{:aliases
- {:box {:extra-deps {io.boxlang/boxlang {:local/root "lib/boxlang-1.0.0-beta20-all.jar"}}}}}
+{}
