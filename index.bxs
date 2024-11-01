@@ -7,9 +7,9 @@ echo("(+ 1 2) = " & plus.invoke(1, 2) & char(10))
 
 // === convenience for core fns we use for interop: ===
 _resolve = (fqn) =>
-  (Clojure::var("clojure.core/requiring-resolve")).invoke(Clojure::read(fqn));
+  Clojure::var("clojure.core/requiring-resolve").invoke(Clojure::read(fqn));
 _seq = (coll) =>
-  (Clojure::var("clojure.core/seq")).invoke(coll);
+  Clojure::var("clojure.core/seq").invoke(coll);
 _next = (coll) => (Clojure::var("clojure.core/next")).invoke(coll);
 
 call = () => _resolve(arguments[1])
@@ -17,7 +17,7 @@ call = () => _resolve(arguments[1])
 // === ===
 
 require = (ns) =>
-  (Clojure::var("clojure.core/require")).invoke(Clojure::read(ns))
+  Clojure::var("clojure.core/require").invoke(Clojure::read(ns))
 
 try {
   require("example.no-such-namespace")
