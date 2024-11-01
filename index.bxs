@@ -12,12 +12,15 @@ _seq = (coll) =>
   Clojure::var("clojure.core/seq").invoke(coll);
 _next = (coll) => (Clojure::var("clojure.core/next")).invoke(coll);
 
+// general call(qualified-name, arg1, arg2, ...):
 call = () => _resolve(arguments[1])
   .applyTo(_next(_seq([].append(arguments, true))));
-// === ===
 
+// require a namespace:
 require = (ns) =>
   Clojure::var("clojure.core/require").invoke(Clojure::read(ns))
+
+// === === === === === === === === === === === ===
 
 try {
   require("example.no-such-namespace")
